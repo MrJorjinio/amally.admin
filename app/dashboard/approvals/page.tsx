@@ -41,7 +41,7 @@ export default function ApprovalsPage() {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   return (
-    <div className="max-w-5xl">
+    <div className="max-w-5xl pt-4">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-[22px] font-bold">Tasdiqlash</h1>
         <span className="text-[13px] text-[#141414]/40">{total} ta kutilayotgan</span>
@@ -61,36 +61,56 @@ export default function ApprovalsPage() {
                   className="p-5 cursor-pointer hover:bg-black/[0.005] transition-colors"
                   onClick={() => toggleExpand(p.id)}
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-[15px] font-semibold text-[#141414]">{p.title}</h3>
-                        {isOpen
-                          ? <ChevronUp size={14} className="text-[#141414]/25 shrink-0" />
-                          : <ChevronDown size={14} className="text-[#141414]/25 shrink-0" />
-                        }
+                  <div>
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-[14px] sm:text-[15px] font-semibold text-[#141414]">{p.title}</h3>
+                          {isOpen
+                            ? <ChevronUp size={14} className="text-[#141414]/25 shrink-0" />
+                            : <ChevronDown size={14} className="text-[#141414]/25 shrink-0" />
+                          }
+                        </div>
+                        <div className="flex items-center gap-2 mt-1.5 text-[11px] sm:text-[12px] text-[#141414]/35 flex-wrap">
+                          <span className="font-medium text-[#141414]/50">{p.author}</span>
+                          <span>·</span>
+                          <span>{p.category}</span>
+                          <span className="hidden sm:inline">·</span>
+                          <span className="hidden sm:inline">{p.region}</span>
+                          <span>·</span>
+                          <span>{new Date(p.createdAt).toLocaleDateString("uz")}</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2 mt-1.5 text-[12px] text-[#141414]/35">
-                        <span className="font-medium text-[#141414]/50">{p.author}</span>
-                        <span>·</span>
-                        <span>{p.category}</span>
-                        <span>·</span>
-                        <span>{p.region}</span>
-                        <span>·</span>
-                        <span>{new Date(p.createdAt).toLocaleDateString("uz")}</span>
+                      {/* Desktop buttons */}
+                      <div className="hidden sm:flex items-center gap-2 shrink-0" onClick={e => e.stopPropagation()}>
+                        <button
+                          onClick={() => handleApprove(p.id)}
+                          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-50 text-emerald-600 text-[12px] font-medium hover:bg-emerald-100 transition-colors"
+                        >
+                          <Check size={14} strokeWidth={2} />
+                          Tasdiqlash
+                        </button>
+                        <button
+                          onClick={() => handleReject(p.id)}
+                          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-50 text-red-400 text-[12px] font-medium hover:bg-red-100 transition-colors"
+                        >
+                          <X size={14} strokeWidth={2} />
+                          Rad etish
+                        </button>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 shrink-0" onClick={e => e.stopPropagation()}>
+                    {/* Mobile buttons */}
+                    <div className="flex sm:hidden items-center gap-2 mt-3" onClick={e => e.stopPropagation()}>
                       <button
                         onClick={() => handleApprove(p.id)}
-                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-50 text-emerald-600 text-[12px] font-medium hover:bg-emerald-100 transition-colors"
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-emerald-50 text-emerald-600 text-[12px] font-medium"
                       >
                         <Check size={14} strokeWidth={2} />
                         Tasdiqlash
                       </button>
                       <button
                         onClick={() => handleReject(p.id)}
-                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-50 text-red-400 text-[12px] font-medium hover:bg-red-100 transition-colors"
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-red-50 text-red-400 text-[12px] font-medium"
                       >
                         <X size={14} strokeWidth={2} />
                         Rad etish
@@ -99,9 +119,11 @@ export default function ApprovalsPage() {
                   </div>
                 </div>
 
-                {isOpen && p.content && (
+                {isOpen && (
                   <div className="px-5 pb-5 pt-0 border-t border-black/[0.04]">
-                    <p className="text-[14px] text-[#141414]/60 leading-relaxed whitespace-pre-wrap pt-4">{p.content}</p>
+                    <p className="text-[14px] text-[#141414]/60 leading-relaxed whitespace-pre-wrap pt-4">
+                      {p.content || "Matn kiritilmagan"}
+                    </p>
                   </div>
                 )}
               </div>

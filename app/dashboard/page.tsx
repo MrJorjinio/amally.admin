@@ -50,7 +50,7 @@ export default function DashboardPage() {
       series: [{
         data: growthData.map(d => d.count),
         type: "bar",
-        barWidth: growthPeriod === "yearly" ? 40 : growthPeriod === "monthly" ? 24 : 10,
+        barWidth: growthPeriod === "yearly" ? 20 : growthPeriod === "monthly" ? 8 : 12,
         itemStyle: { color: "#69824F", borderRadius: [4, 4, 0, 0] },
       }],
       tooltip: { trigger: "axis", textStyle: { fontSize: 12 } },

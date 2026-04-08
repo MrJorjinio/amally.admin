@@ -18,14 +18,14 @@ export default function UsersPage() {
   const totalPages = Math.ceil(total / pageSize);
 
   return (
-    <div className="max-w-5xl">
+    <div className="max-w-5xl pt-4">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-[22px] font-bold">Foydalanuvchilar</h1>
         <span className="text-[13px] text-[#141414]/40">{total} ta</span>
       </div>
 
-      <div className="bg-white rounded-2xl border border-black/[0.06] overflow-hidden">
-        <table className="w-full">
+      <div className="bg-white rounded-2xl border border-black/[0.06] overflow-x-auto">
+        <table className="w-full min-w-[600px]">
           <thead>
             <tr className="border-b border-black/[0.04]">
               <th className="text-left px-5 py-3 text-[11px] font-semibold text-[#141414]/40 uppercase tracking-wider">Foydalanuvchi</th>
