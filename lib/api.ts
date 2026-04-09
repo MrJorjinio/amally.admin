@@ -55,6 +55,11 @@ export async function getPosts(page = 1, pageSize = 20, status = "all") {
   return res.json();
 }
 
+export async function getPost(id: string) {
+  const res = await authFetch(`${API}/admin/posts/${id}`);
+  return res.json();
+}
+
 export async function approvePost(id: string) {
   const res = await authFetch(`${API}/admin/posts/${id}/approve`, { method: "POST" });
   return res.json();

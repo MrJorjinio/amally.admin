@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Check, X, ChevronLeft, ChevronRight, ChevronDown, ChevronUp } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Check, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { getPosts, approvePost, rejectPost } from "@/lib/api";
 
 export default function ApprovalsPage() {
+  const router = useRouter();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [posts, setPosts] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
-  const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const pageSize = 20;
 
   const fetchPending = () => {
@@ -18,21 +19,15 @@ export default function ApprovalsPage() {
 
   useEffect(fetchPending, [page]);
 
-  const toggleExpand = (id: string) => {
-    setExpanded(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id); else next.add(id);
-      return next;
-    });
-  };
-
-  const handleApprove = async (id: string) => {
+  const handleApprove = async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
     await approvePost(id);
     setPosts(prev => prev.filter(p => p.id !== id));
     setTotal(t => t - 1);
   };
 
-  const handleReject = async (id: string) => {
+  const handleReject = async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
     await rejectPost(id);
     setPosts(prev => prev.filter(p => p.id !== id));
     setTotal(t => t - 1);
@@ -53,82 +48,67 @@ export default function ApprovalsPage() {
         </div>
       ) : (
         <div className="space-y-3">
-          {posts.map(p => {
-            const isOpen = expanded.has(p.id);
-            return (
-              <div key={p.id} className="bg-white rounded-2xl border border-black/[0.06] overflow-hidden">
-                <div
-                  className="p-5 cursor-pointer hover:bg-black/[0.005] transition-colors"
-                  onClick={() => toggleExpand(p.id)}
-                >
-                  <div>
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <h3 className="text-[14px] sm:text-[15px] font-semibold text-[#141414]">{p.title}</h3>
-                          {isOpen
-                            ? <ChevronUp size={14} className="text-[#141414]/25 shrink-0" />
-                            : <ChevronDown size={14} className="text-[#141414]/25 shrink-0" />
-                          }
-                        </div>
-                        <div className="flex items-center gap-2 mt-1.5 text-[11px] sm:text-[12px] text-[#141414]/35 flex-wrap">
-                          <span className="font-medium text-[#141414]/50">{p.author}</span>
-                          <span>·</span>
-                          <span>{p.category}</span>
-                          <span className="hidden sm:inline">·</span>
-                          <span className="hidden sm:inline">{p.region}</span>
-                          <span>·</span>
-                          <span>{new Date(p.createdAt).toLocaleDateString("uz")}</span>
-                        </div>
-                      </div>
-                      {/* Desktop buttons */}
-                      <div className="hidden sm:flex items-center gap-2 shrink-0" onClick={e => e.stopPropagation()}>
-                        <button
-                          onClick={() => handleApprove(p.id)}
-                          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-50 text-emerald-600 text-[12px] font-medium hover:bg-emerald-100 transition-colors"
-                        >
-                          <Check size={14} strokeWidth={2} />
-                          Tasdiqlash
-                        </button>
-                        <button
-                          onClick={() => handleReject(p.id)}
-                          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-50 text-red-400 text-[12px] font-medium hover:bg-red-100 transition-colors"
-                        >
-                          <X size={14} strokeWidth={2} />
-                          Rad etish
-                        </button>
-                      </div>
-                    </div>
-                    {/* Mobile buttons */}
-                    <div className="flex sm:hidden items-center gap-2 mt-3" onClick={e => e.stopPropagation()}>
-                      <button
-                        onClick={() => handleApprove(p.id)}
-                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-emerald-50 text-emerald-600 text-[12px] font-medium"
-                      >
-                        <Check size={14} strokeWidth={2} />
-                        Tasdiqlash
-                      </button>
-                      <button
-                        onClick={() => handleReject(p.id)}
-                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-red-50 text-red-400 text-[12px] font-medium"
-                      >
-                        <X size={14} strokeWidth={2} />
-                        Rad etish
-                      </button>
-                    </div>
+          {posts.map(p => (
+            <div
+              key={p.id}
+              onClick={() => router.push(`/dashboard/approvals/${p.id}`)}
+              className="bg-white rounded-2xl border border-black/[0.06] p-5 cursor-pointer hover:border-black/[0.1] transition-colors"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-[14px] sm:text-[15px] font-semibold text-[#141414] line-clamp-2 break-words">
+                    {p.title}
+                  </h3>
+                  <p className="mt-1 text-[13px] text-[#141414]/40 line-clamp-1 break-all">
+                    {p.content}
+                  </p>
+                  <div className="flex items-center gap-2 mt-2 text-[11px] sm:text-[12px] text-[#141414]/35 flex-wrap">
+                    <span className="font-medium text-[#141414]/50">{p.author}</span>
+                    <span>·</span>
+                    <span>{p.category}</span>
+                    <span>·</span>
+                    <span>{p.region}</span>
+                    <span>·</span>
+                    <span>{new Date(p.createdAt).toLocaleDateString("uz")}</span>
                   </div>
                 </div>
-
-                {isOpen && (
-                  <div className="px-5 pb-5 pt-0 border-t border-black/[0.04]">
-                    <p className="text-[14px] text-[#141414]/60 leading-relaxed whitespace-pre-wrap pt-4">
-                      {p.content || "Matn kiritilmagan"}
-                    </p>
-                  </div>
-                )}
+                {/* Desktop buttons */}
+                <div className="hidden sm:flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={(e) => handleApprove(e, p.id)}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-50 text-emerald-600 text-[12px] font-medium hover:bg-emerald-100 transition-colors"
+                  >
+                    <Check size={14} strokeWidth={2} />
+                    Tasdiqlash
+                  </button>
+                  <button
+                    onClick={(e) => handleReject(e, p.id)}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-50 text-red-400 text-[12px] font-medium hover:bg-red-100 transition-colors"
+                  >
+                    <X size={14} strokeWidth={2} />
+                    Rad etish
+                  </button>
+                </div>
               </div>
-            );
-          })}
+              {/* Mobile buttons */}
+              <div className="flex sm:hidden items-center gap-2 mt-3">
+                <button
+                  onClick={(e) => handleApprove(e, p.id)}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-emerald-50 text-emerald-600 text-[12px] font-medium"
+                >
+                  <Check size={14} strokeWidth={2} />
+                  Tasdiqlash
+                </button>
+                <button
+                  onClick={(e) => handleReject(e, p.id)}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-red-50 text-red-400 text-[12px] font-medium"
+                >
+                  <X size={14} strokeWidth={2} />
+                  Rad etish
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
