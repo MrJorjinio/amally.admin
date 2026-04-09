@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { getUsers } from "@/lib/api";
+import { getUsers, FRONTEND_URL } from "@/lib/api";
 
 export default function UsersPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,7 +38,7 @@ export default function UsersPage() {
             {users.map(u => (
               <tr key={u.id} className="border-b border-black/[0.03] last:border-0 hover:bg-black/[0.01] transition-colors">
                 <td className="px-5 py-3.5">
-                  <a href={`${process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000"}/profile/${u.username}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                  <a href={`${FRONTEND_URL}/profile/${u.username}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                     {u.profilePictureUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={u.profilePictureUrl} alt={u.fullName} className="w-8 h-8 rounded-full object-cover shrink-0" />
@@ -54,7 +54,7 @@ export default function UsersPage() {
                   </a>
                 </td>
                 <td className="px-5 py-3.5 text-[13px] text-[#141414]/50">
-                  <a href={`${process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000"}/profile/${u.username}`} target="_blank" rel="noopener noreferrer" className="hover:text-[#69824F] transition-colors">@{u.username}</a>
+                  <a href={`${FRONTEND_URL}/profile/${u.username}`} target="_blank" rel="noopener noreferrer" className="hover:text-[#69824F] transition-colors">@{u.username}</a>
                 </td>
                 <td className="px-5 py-3.5 text-[13px] text-[#141414]/50">{u.postsCount}</td>
                 <td className="px-5 py-3.5 text-[13px] text-[#141414]/35">{new Date(u.createdAt).toLocaleDateString("uz")}</td>

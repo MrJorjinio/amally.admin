@@ -1,4 +1,5 @@
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5194/api";
+export const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
 
 function getToken() {
   if (typeof window === "undefined") return null;
