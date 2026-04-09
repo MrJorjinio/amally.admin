@@ -1,5 +1,6 @@
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5194/api";
-export const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
+
+export const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL || "https://amallyfrontend-production.up.railway.app";
 
 function getToken() {
   if (typeof window === "undefined") return null;
