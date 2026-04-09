@@ -46,6 +46,11 @@ export async function getTopPosts(period: string) {
   return res.json();
 }
 
+export async function getUser(id: string) {
+  const res = await authFetch(`${API}/admin/users/${id}`);
+  return res.json();
+}
+
 export async function getUsers(page = 1, pageSize = 20) {
   const res = await authFetch(`${API}/admin/users?page=${page}&pageSize=${pageSize}`);
   return res.json();

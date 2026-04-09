@@ -12,6 +12,8 @@ export default function UsersPage() {
   const pageSize = 20;
 
   useEffect(() => {
+    console.log("[DEBUG] FRONTEND_URL =", FRONTEND_URL);
+    console.log("[DEBUG] env =", process.env.NEXT_PUBLIC_FRONTEND_URL);
     getUsers(page, pageSize).then(r => { setUsers(r.items); setTotal(r.totalCount); });
   }, [page]);
 
