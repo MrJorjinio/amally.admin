@@ -18,7 +18,7 @@ export default function UsersPage() {
   const totalPages = Math.ceil(total / pageSize);
 
   return (
-    <div className="max-w-5xl pt-4">
+    <div className="max-w-5xl">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-[22px] font-bold">Foydalanuvchilar</h1>
         <span className="text-[13px] text-[#141414]/40">{total} ta</span>

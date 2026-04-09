@@ -31,7 +31,7 @@ export default function PostsPage() {
   };
 
   return (
-    <div className="max-w-5xl pt-4">
+    <div className="max-w-5xl">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
         <h1 className="text-[22px] font-bold">Postlar</h1>
         <div className="flex gap-1 flex-wrap">
